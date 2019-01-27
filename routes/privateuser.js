@@ -9,7 +9,7 @@ const app = express();
 
 app.put('/:user_id',(req,res)=>{
     const {user_id} = req.params
-    if(parseInt(user_id) != parseInt(req.headers[id])) {
+    if(parseInt(user_id) != parseInt(req.headers.id)) {
         res.json({Error:'params not matching header id'})
         return
     }

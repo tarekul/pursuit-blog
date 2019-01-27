@@ -1,5 +1,6 @@
 const express = require('express')
 const commentService =  require('../services/comment')
+const userService = require('../services/user')
 const app = express();
 
 app.post('/',(req,res)=>{
@@ -17,16 +18,22 @@ app.post('/',(req,res)=>{
 })
 
 app.put('/:comment_id',(req,res)=>{
-    //const {id} = req.headers
     const {comment_id} = req.params
     const {post_id,title,body} = req.body
-    commentService.update(comment_id,post_id,title,body)
+    
+    commentService.readToken(comment_id)
+    .then((response)=>{
+        if(response.token !== req.headers.token){
+            throw new Error('User not authorized to perform this action')
+        }
+        return commentService.update(comment_id,post_id,title,body)
+    })
     .then(()=>{
         return commentService.readCommentWithID(comment_id)
-    },err=>{throw new Error('could not update')})
+    })
     .then(response =>{
         res.json(response)
-    },err=>{throw new Error('could not read')})
+    })
     .catch(err=>{
         res.json(err.toString())
     })

@@ -3,6 +3,27 @@ const postService =  require('../services/post')
 const commentService =  require('../services/comment')
 const app = express();
 
+const userService = require('../services/user')
+
+//localhost:5000/user/3
+// const tokenAuth = (req,res,next) =>{
+//     const {user_id} = req.params
+//     //const {id} = req.headers
+    
+//     userService.read(id)  //resolve(response) or reject
+//     .then((response)=>{
+//         const headersToken = req.headers['token']
+//         const dbToken = response.token
+//         if(headersToken === dbToken)
+//             next()
+//         else res.json('token incorrect')    
+//     },err=>{throw new Error(`user with id: ${id} does not exist`)})
+//     .catch(err=>{
+//         res.json(err.toString())
+//     })
+
+// }
+
 app.post('/',(req,res)=>{
     //in the headers client passes user_id and token
     //use user_id to create a post with title and body and author = user_id

@@ -11,6 +11,7 @@ const loginChecker = (req,res,next) =>{
         const dbToken = response.token
         if(headersToken === dbToken)
             next()
+        else if(dbToken === null) throw new Error('user not logged in')   
         else res.json('token incorrect')    
     },err=>{throw new Error(`user with id: ${id} does not exist`)})
     .catch(err=>{

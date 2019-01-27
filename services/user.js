@@ -13,6 +13,14 @@ userService.read = (id) =>{
     
 }
 
+userService.readName = (username) =>{
+    return db.one('SELECT id FROM users WHERE username=${username}',{username})
+}
+
+userService.readUserIDWithToken = token =>{
+    return db.one('SELECT id FROM users WHERE token=${token}',{token})
+}
+
 // userService.readUsername = (username)=>{
 //     return db.one('SELECT * FROM users WHERE username=${username}',{username})   
 // }

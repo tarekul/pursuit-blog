@@ -96,24 +96,26 @@ app.post('/',(req,res)=>{
 })
 
 app.post('/login',(req,res)=>{
-    let {id,username,password} = req.body
-    if(!id || !username || !password) res.json({Error: 'Must enter id,username,password'})
-    userService.read(id)
+    let {username,password} = req.body
+    let id = 0;
+    if(!username || !password) res.json({Error: 'Must enter username,password'})
+    userService.readName(username)
+    .then(id_response =>{
+        id = id_response.id
+        console.log(id)
+        return userService.read(id)
+    })
     .then(data=>{   
-        if(username != data.username) throw new Error('Incorrect username')
+        if(data.token) throw new Error('Already logged in')
+        else if(username != data.username) throw new Error('Incorrect username')
         return bcrypt.compare(password,data.password)
     },err=>{
         throw new Error('username does not exist')
     })
     .then(response=>{
         if(!response) throw new Error('Password is incorrect')
-        return userService.read(id)
         
-    })
-    .then((data)=>{
-        if(data.token) throw new Error('Already logged in')
         const tokenn = uuid();
-        
         userService.update(id,username=null,password=null,email=null,tokenn)
         res.json({status:'login Success',tokenn})
     })
