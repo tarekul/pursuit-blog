@@ -33,7 +33,8 @@ app.put('/:comment_id',(req,res)=>{
     })
     .then(response =>{
         res.json(response)
-    })
+    },err=>{
+        throw new Error('could not read')})
     .catch(err=>{
         res.json(err.toString())
     })
