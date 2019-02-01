@@ -47,7 +47,7 @@ postService.delete = (id) =>{
 }
 
 postService.deletePostWithUserID = (author) =>{
-    return db.none('DELETE FROM posts WHERE author=author',{author})
+    return db.none('DELETE FROM posts WHERE author=${author}',{author})
 } 
 
 

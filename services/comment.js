@@ -9,22 +9,23 @@ commentService.create = (author,post_id,title,body) =>{
 }
 
 commentService.readCommentWithID = (id) =>{
-    return db.one('SELECT * FROM comments WHERE id=${id}',{id}) 
-    
+    return db.one('SELECT * FROM comments WHERE id=${id}',{id})
 }
 
 commentService.readCommentsOnPost = (post_id) =>{
     return db.any('SELECT * FROM comments WHERE post_id=${post_id}',{post_id})
 } 
 
+commentService.readCommentWithAuthor = (author) =>{
+    return db.any('SELECT * FROM comments WHERE author=${author}',{author})
+}
+
 commentService.readToken = (id) =>{
     return db.one('SELECT author FROM comments WHERE id=${id}',{id})
     .then((response)=>{
         const user_id = response.author
-            return db.one(`SELECT u.token 
-                FROM users u JOIN comments c 
-                ON u.id=$[user_id] AND c.author=$[user_id]`,{user_id})
-    })
+            return db.one(`SELECT token FROM users WHERE id=${user_id}`,{user_id})
+    }, err => Promise.reject('No data'))
     
 }
 
